@@ -1,96 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Mr.Doctor Futuristic Medical AI Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Core Jarvis-inspired colors */
+    --background: 216 100% 2%;
+    --foreground: 195 100% 90%;
+    
+    /* Neon cyan/blue palette */
+    --primary: 195 100% 60%;
+    --primary-foreground: 216 100% 2%;
+    --primary-glow: 195 100% 70%;
+    
+    /* Holographic gradients */
+    --secondary: 200 100% 8%;
+    --secondary-foreground: 195 100% 80%;
+    
+    /* AI Interface elements */
+    --muted: 210 50% 6%;
+    --muted-foreground: 195 50% 65%;
+    
+    --accent: 195 100% 15%;
+    --accent-foreground: 195 100% 85%;
+    
+    /* Medical alert colors */
+    --emergency: 0 100% 60%;
+    --emergency-foreground: 0 0% 100%;
+    --warning: 45 100% 55%;
+    --warning-foreground: 45 100% 10%;
+    --safe: 150 100% 45%;
+    --safe-foreground: 150 100% 5%;
+    
+    /* Interface elements */
+    --card: 216 100% 3%;
+    --card-foreground: 195 100% 85%;
+    
+    --border: 195 100% 15%;
+    --input: 210 50% 8%;
+    --ring: 195 100% 60%;
+    
+    /* Holographic effects */
+    --hologram-primary: linear-gradient(135deg, hsl(195 100% 60%), hsl(180 100% 50%), hsl(200 100% 70%));
+    --hologram-secondary: linear-gradient(45deg, hsl(195 100% 20%), hsl(180 100% 15%));
+    --ai-core-glow: 0 0 30px hsl(195 100% 60%), 0 0 60px hsl(195 100% 40%);
+    --panel-glow: 0 4px 20px hsla(195 100% 60% / 0.3);
+    
+    --radius: 0.75rem;
   }
+}
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-rajdhani;
+    background: 
+      radial-gradient(circle at 20% 50%, hsla(195 100% 60% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsla(180 100% 50% / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, hsla(200 100% 70% / 0.06) 0%, transparent 50%),
+      hsl(var(--background));
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', monospace;
+  }
+  
+  .font-rajdhani {
+    font-family: 'Rajdhani', sans-serif;
+  }
+}
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+@layer components {
+  /* AI Core Animation */
+  .ai-core {
+    @apply relative w-24 h-24 rounded-full;
+    background: var(--hologram-primary);
+    box-shadow: var(--ai-core-glow);
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  
+  .ai-core::before {
+    content: '';
+    @apply absolute inset-2 rounded-full;
+    background: var(--hologram-secondary);
+    animation: rotate-core 20s linear infinite;
+  }
+  
+  /* Holographic Panel */
+  .holo-panel {
+    @apply bg-card/50 border border-primary/30 rounded-lg backdrop-blur-md;
+    box-shadow: var(--panel-glow);
+    background: linear-gradient(135deg, 
+      hsla(195 100% 60% / 0.05), 
+      hsla(180 100% 50% / 0.02)
+    );
+  }
+  
+  /* Particle Background */
+  .particles-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: hsl(195 100% 60%);
+    border-radius: 50%;
+    animation: float-particle 15s linear infinite;
+    opacity: 0;
+  }
+  
+  /* Alert Styles */
+  .alert-emergency {
+    @apply bg-emergency/10 border border-emergency/50 text-emergency-foreground;
+    box-shadow: 0 0 20px hsla(0 100% 60% / 0.3);
+  }
+  
+  .alert-warning {
+    @apply bg-warning/10 border border-warning/50 text-warning-foreground;
+    box-shadow: 0 0 20px hsla(45 100% 55% / 0.3);
+  }
+  
+  .alert-safe {
+    @apply bg-safe/10 border border-safe/50 text-safe-foreground;
+    box-shadow: 0 0 20px hsla(150 100% 45% / 0.3);
+  }
+  
+  /* Typing Animation */
+  .typing-dots {
+    @apply flex items-center space-x-1;
+  }
+  
+  .typing-dot {
+    @apply w-2 h-2 bg-primary rounded-full;
+    animation: typing-bounce 1.4s ease-in-out infinite;
+  }
+  
+  .typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  
+  .typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: var(--ai-core-glow);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(195 100% 60%), 0 0 80px hsl(195 100% 40%);
+    transform: scale(1.05);
+  }
+}
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+@keyframes rotate-core {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+@keyframes float-particle {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) rotate(360deg);
+  }
+}
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+@keyframes typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
   }
 }
 
