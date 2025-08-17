@@ -28,13 +28,15 @@
     --accent: 195 100% 15%;
     --accent-foreground: 195 100% 85%;
     
-    /* Medical alert colors */
-    --emergency: 0 100% 60%;
+    /* Medical alert colors - Updated for better UX */
+    --emergency: 345 100% 65%;
     --emergency-foreground: 0 0% 100%;
-    --warning: 45 100% 55%;
-    --warning-foreground: 45 100% 10%;
-    --safe: 150 100% 45%;
-    --safe-foreground: 150 100% 5%;
+    --warning: 35 100% 60%;
+    --warning-foreground: 35 100% 5%;
+    --safe: 140 100% 50%;
+    --safe-foreground: 140 100% 5%;
+    --info: 210 100% 65%;
+    --info-foreground: 210 100% 5%;
     
     /* Interface elements */
     --card: 216 100% 3%;
@@ -124,20 +126,25 @@
     opacity: 0;
   }
   
-  /* Alert Styles */
+  /* Alert Styles - Softer and more user-friendly */
   .alert-emergency {
-    @apply bg-emergency/10 border border-emergency/50 text-emergency-foreground;
-    box-shadow: 0 0 20px hsla(0 100% 60% / 0.3);
+    @apply bg-emergency/15 border border-emergency/40 text-emergency-foreground;
+    box-shadow: 0 0 15px hsla(345 100% 65% / 0.25);
   }
   
   .alert-warning {
-    @apply bg-warning/10 border border-warning/50 text-warning-foreground;
-    box-shadow: 0 0 20px hsla(45 100% 55% / 0.3);
+    @apply bg-warning/15 border border-warning/40 text-warning-foreground;
+    box-shadow: 0 0 15px hsla(35 100% 60% / 0.25);
   }
   
   .alert-safe {
-    @apply bg-safe/10 border border-safe/50 text-safe-foreground;
-    box-shadow: 0 0 20px hsla(150 100% 45% / 0.3);
+    @apply bg-safe/15 border border-safe/40 text-safe-foreground;
+    box-shadow: 0 0 15px hsla(140 100% 50% / 0.25);
+  }
+  
+  .alert-info {
+    @apply bg-info/15 border border-info/40 text-info-foreground;
+    box-shadow: 0 0 15px hsla(210 100% 65% / 0.25);
   }
   
   /* Typing Animation */

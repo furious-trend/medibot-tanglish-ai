@@ -60,6 +60,10 @@ export default {
 				safe: {
 					DEFAULT: 'hsl(var(--safe))',
 					foreground: 'hsl(var(--safe-foreground))'
+				},
+				info: {
+					DEFAULT: 'hsl(var(--info))',
+					foreground: 'hsl(var(--info-foreground))'
 				}
 			},
 			borderRadius: {

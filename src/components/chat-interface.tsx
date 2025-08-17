@@ -13,7 +13,7 @@ interface Message {
   sender: "user" | "ai";
   timestamp: Date;
   alerts?: Array<{
-    type: "emergency" | "warning" | "safe";
+    type: "emergency" | "warning" | "safe" | "info";
     title: string;
     description: string;
   }>;
@@ -23,7 +23,7 @@ const ChatInterface = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      content: "Hello! I'm Mr.Doctor, your AI-powered health assistant. How can I help you today? நான் உங்கள் medical questions-க்கு answer பண்ணுவேன்.",
+      content: "Hi! I'm Mr.Doctor 👨‍⚕️ Tell me your symptoms and I'll give you quick health tips. English या Tanglish में बात करें!",
       sender: "ai",
       timestamp: new Date()
     }
@@ -41,37 +41,47 @@ const ChatInterface = () => {
     scrollToBottom();
   }, [messages]);
 
-  const analyzeSymptoms = (message: string): Array<{ type: "emergency" | "warning" | "safe"; title: string; description: string; }> => {
+  const analyzeSymptoms = (message: string): Array<{ type: "emergency" | "warning" | "safe" | "info"; title: string; description: string; }> => {
     const lowerMessage = message.toLowerCase();
     const alerts = [];
 
     // Emergency symptoms
-    if (lowerMessage.includes("chest pain") || lowerMessage.includes("difficulty breathing") || 
-        lowerMessage.includes("severe headache") || lowerMessage.includes("unconscious")) {
+    if (lowerMessage.includes("chest pain") || lowerMessage.includes("breathing") || 
+        lowerMessage.includes("severe pain") || lowerMessage.includes("bleeding")) {
       alerts.push({
         type: "emergency" as const,
-        title: "Emergency Alert",
-        description: "Your symptoms may require immediate medical attention. Please consider visiting an emergency room or calling emergency services."
+        title: "🚨 Urgent",
+        description: "Please seek immediate medical attention or call emergency services."
       });
     }
     
     // Warning symptoms
     else if (lowerMessage.includes("fever") || lowerMessage.includes("headache") || 
-             lowerMessage.includes("nausea") || lowerMessage.includes("fatigue")) {
+             lowerMessage.includes("nausea") || lowerMessage.includes("pain")) {
       alerts.push({
         type: "warning" as const,
-        title: "Monitor Symptoms",
-        description: "Please monitor these symptoms. Consider consulting a healthcare provider if they worsen or persist."
+        title: "⚠️ Monitor",
+        description: "Keep an eye on symptoms. Consult doctor if they worsen."
       });
     }
     
-    // Safe/general health
-    else if (lowerMessage.includes("wellness") || lowerMessage.includes("prevention") || 
-             lowerMessage.includes("healthy")) {
+    // General health queries
+    else if (lowerMessage.includes("wellness") || lowerMessage.includes("tips") || 
+             lowerMessage.includes("healthy") || lowerMessage.includes("diet")) {
+      alerts.push({
+        type: "info" as const,
+        title: "💡 Health Tip",
+        description: "Great question! Preventive care is the best medicine."
+      });
+    }
+    
+    // Safe/mild symptoms
+    else if (lowerMessage.includes("cold") || lowerMessage.includes("tired") || 
+             lowerMessage.includes("sleep")) {
       alerts.push({
         type: "safe" as const,
-        title: "Health Guidance",
-        description: "Great that you're focused on maintaining good health! I can provide general wellness tips."
+        title: "✅ Manageable",
+        description: "This can usually be managed with home care and rest."
       });
     }
 
@@ -88,19 +98,31 @@ const ChatInterface = () => {
     
     if (lowerMessage.includes("fever")) {
       return hasTamil ? 
-        "Fever-ku நீங்க rest எடுக்கணும். Plenty of fluids குடிங்க, paracetamol tablet take பண்ணலாம். If temperature 102°F மேல போனா doctor-ஐ consult பண்ணுங்க." :
-        "For fever, please get adequate rest and drink plenty of fluids. You can take paracetamol as directed. If temperature exceeds 102°F or persists for more than 3 days, please consult a healthcare provider.";
+        "Fever-ku rest எடுங்க, water அதிகம் குடிங்க. Paracetamol safe. 102°F மேல போனா doctor கிட்ட போங்க!" :
+        "💊 **Quick Tips:** Rest, drink fluids, take paracetamol. See doctor if fever >102°F or lasts 3+ days.";
     }
     
     if (lowerMessage.includes("headache")) {
       return hasTamil ?
-        "Headache-ku first நீங்க rest எடுக்கணும். Enough water குடிங்க, stress avoid பண்ணுங்க. If severe pain-னா doctor கிட்ட போங்க." :
-        "For headaches, ensure you're well-rested and hydrated. Avoid stress and screen time. If pain is severe or accompanied by other symptoms, please seek medical attention.";
+        "Headache-ku rest, water, fresh air try பண்ணுங்க. Severe pain-னா doctor check பண்ணுங்க." :
+        "🧠 **Quick Relief:** Rest in dark room, drink water, gentle head massage. Severe pain = see doctor.";
+    }
+    
+    if (lowerMessage.includes("cold") || lowerMessage.includes("cough")) {
+      return hasTamil ?
+        "Cold-ku warm water, honey, rest important. Steam inhale பண்ணுங்க." :
+        "🤧 **Home Care:** Warm water, honey, steam inhalation, rest. Usually resolves in 5-7 days.";
+    }
+    
+    if (lowerMessage.includes("diet") || lowerMessage.includes("nutrition")) {
+      return hasTamil ?
+        "Healthy diet-ku fruits, vegetables, water அதிகம் எடுங்க. Junk food avoid பண்ணுங்க." :
+        "🥗 **Nutrition Tips:** More fruits/vegetables, 8 glasses water daily, limit processed foods.";
     }
     
     return hasTamil ?
-      "உங்க symptoms பத்தி கொஞ்சம் more details சொல்லுங்க. நான் better guidance தர முடியும். Remember, serious symptoms-னா doctor கிட்ட போகணும்." :
-      "Please provide more details about your symptoms so I can offer better guidance. Remember, for serious symptoms, always consult with a healthcare professional.";
+      "Symptoms பத்தி clearly சொல்லுங்க. Better suggestion தர முடியும். Serious symptoms-னா doctor கிட்ட போங்க!" :
+      "💬 **Need more details** about your symptoms to give better suggestions. Always consult doctor for serious concerns!";
   };
 
   const handleSendMessage = async () => {
@@ -233,7 +255,7 @@ const ChatInterface = () => {
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Describe your symptoms... உங்க symptoms சொல்லுங்க..."
+            placeholder="Type your symptoms... Symptoms சொல்லுங்க..."
             className="flex-1 holo-panel bg-input/50 border-primary/30"
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
           />

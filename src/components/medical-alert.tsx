@@ -1,8 +1,8 @@
-import { AlertTriangle, Heart, Shield } from "lucide-react";
+import { AlertTriangle, Heart, Shield, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MedicalAlertProps {
-  type: "emergency" | "warning" | "safe";
+  type: "emergency" | "warning" | "safe" | "info";
   title: string;
   description: string;
   className?: string;
@@ -24,6 +24,11 @@ const MedicalAlert = ({ type, title, description, className }: MedicalAlertProps
       icon: Shield,
       className: "alert-safe",
       iconColor: "text-safe"
+    },
+    info: {
+      icon: Info,
+      className: "alert-info",
+      iconColor: "text-info"
     }
   };
 
