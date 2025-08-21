@@ -311,4 +311,5 @@ const ChatInterface = () => {
   );
 };
 
+// Export the ChatInterface component as default
 export default ChatInterface;
