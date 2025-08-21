@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ const ChatInterface: React.FC = () => {
     { type: "user" | "bot"; text: string }[]
   >([]);
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [alerts, setAlerts] = useState<
     {
       type: "emergency" | "warning" | "safe" | "info";
@@ -23,10 +25,12 @@ const ChatInterface: React.FC = () => {
       description: string;
     }[]
   >([]);
+  const { toast } = useToast();
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isLoading) return;
 
+    setIsLoading(true);
     // User message
     const userMessage = { type: "user" as const, text: inputValue };
     setMessages((prev) => [...prev, userMessage]);
@@ -41,11 +45,15 @@ const ChatInterface: React.FC = () => {
     setMessages((prev) => [...prev, botMessage]);
 
     setInputValue("");
+    setIsLoading(false);
   };
 
   const fetchAIResponse = async (input: string): Promise<string> => {
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
+      console.log("🔄 Sending message to AI:", input);
+      
+      // Use Supabase Edge Function endpoint
+      const response = await fetch("/functions/v1/gemini-chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,11 +61,35 @@ const ChatInterface: React.FC = () => {
         body: JSON.stringify({ message: input }),
       });
 
+      console.log("📡 Response status:", response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("❌ API Error:", response.status, errorText);
+        
+        toast({
+          title: "API Connection Error",
+          description: `Failed to connect to AI service (${response.status}). Please ensure Supabase is connected and Gemini API key is set.`,
+          variant: "destructive",
+        });
+        
+        return `⚠️ Connection Error: Unable to reach AI service (Status: ${response.status}). Please check if Supabase is connected and API keys are configured.`;
+      }
+
       const data = await response.json();
+      console.log("✅ AI Response received:", data);
+      
       return data?.response ?? "Sorry, I couldn't process your request.";
     } catch (error) {
-      console.error("Error fetching AI response:", error);
-      return "Sorry, I couldn't connect to the server.";
+      console.error("❌ Network Error:", error);
+      
+      toast({
+        title: "Network Error",
+        description: "Unable to connect to the AI service. Please check your connection.",
+        variant: "destructive",
+      });
+      
+      return `🔌 Network Error: ${error instanceof Error ? error.message : 'Unable to connect to AI service'}`;
     }
   };
 
@@ -187,9 +219,10 @@ const ChatInterface: React.FC = () => {
             />
             <Button
               onClick={handleSendMessage}
-              className="bg-primary hover:bg-primary/80"
+              disabled={isLoading}
+              className="bg-primary hover:bg-primary/80 disabled:opacity-50"
             >
-              Send
+              {isLoading ? "Sending..." : "Send"}
             </Button>
           </div>
         </CardContent>
