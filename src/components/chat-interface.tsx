@@ -90,6 +90,8 @@ const ChatInterface = () => {
 
   const generateAIResponse = async (userMessage: string): Promise<string> => {
     try {
+      console.log('Calling Gemini API with message:', userMessage);
+      
       const response = await fetch('/functions/v1/gemini-chat', {
         method: 'POST',
         headers: {
@@ -98,11 +100,16 @@ const ChatInterface = () => {
         body: JSON.stringify({ message: userMessage }),
       });
 
+      console.log('API Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('API request failed');
+        const errorText = await response.text();
+        console.error('API Error:', errorText);
+        throw new Error(`API request failed: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('API Response data:', data);
       return data.response;
     } catch (error) {
       console.error('Error calling Gemini API:', error);
